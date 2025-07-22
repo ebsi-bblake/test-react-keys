@@ -26,34 +26,31 @@ const App = () => {
     }
   }, [posts, showWithKeys]);
 
+  const handleToggle = () => {
+    setShowWithKeys((prev) => {
+      console.log("Toggling to:", !prev);
+      // Reset posts to force list re-evaluation
+      setPosts([...posts]);
+      return !prev;
+    });
+  };
+
   return (
     <div>
       <h1>React Key Test</h1>
       {error && <p style={{ color: "red" }}>Error: {error}</p>}
       <p>Current mode: {showWithKeys ? "WITH Keys" : "WITHOUT Keys"}</p>
-      <button
-        onClick={() => {
-          setShowWithKeys((prev) => {
-            console.log("Toggling showWithKeys to:", !prev);
-            return !prev;
-          });
-        }}
-      >
+      <button onClick={handleToggle}>
         Toggle {showWithKeys ? "WITHOUT" : "WITH"} Keys
       </button>
       <ul>
-        {posts.map((post, index) => {
-          const render = showWithKeys ? (
-            <li key={post.id}>{post.title}</li>
+        {posts.map((post) =>
+          showWithKeys ? (
+            <li >{post.title}</li>
           ) : (
-            <li>
-              {console.warn(`Missing key prop for post ${index}: ${post.title}`) &&
-                post.title}
-            </li>
-          );
-          console.log(`Rendering post ${index} ${showWithKeys ? "with" : "without"} key`);
-          return render;
-        })}
+            <li key={post.id}>{post.title}</li>
+          )
+        )}
       </ul>
     </div>
   );
